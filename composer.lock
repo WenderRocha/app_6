@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9ed0ad7f3429974987a5afe9bce4347",
+    "content-hash": "02adabab155299e18e9b24fbfd64746f",
     "packages": [
         {
             "name": "brick/math",
@@ -436,6 +436,51 @@
                 }
             ],
             "time": "2022-06-18T20:57:19+00:00"
+        },
+        {
+            "name": "eliezer/chapolim",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eliezer-alves/chapolim.git",
+                "reference": "c5a9c6c9f9891029fc3f29d57a28a94e84a7ecbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eliezer-alves/chapolim/zipball/c5a9c6c9f9891029fc3f29d57a28a94e84a7ecbe",
+                "reference": "c5a9c6c9f9891029fc3f29d57a28a94e84a7ecbe",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Eliezer\\Chapolim\\ArtisanCommandsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Eliezer\\Chapolim\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "eliezer",
+                    "email": "eliezer.c.alves2015@gmail.com"
+                }
+            ],
+            "description": "A simple package to manage the creation of a structure composed of the service and repository layers in a Laravel application",
+            "support": {
+                "issues": "https://github.com/eliezer-alves/chapolim/issues",
+                "source": "https://github.com/eliezer-alves/chapolim/tree/main"
+            },
+            "time": "2021-12-03T00:04:19+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -8020,7 +8065,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "eliezer/chapolim": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
