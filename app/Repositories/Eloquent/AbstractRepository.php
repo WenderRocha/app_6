@@ -9,8 +9,8 @@ abstract class AbstractRepository implements AbstractRepositoryInterface
 {
     public function __construct(
         protected Permission $model
-    )
-    {}
+    ) {
+    }
 
     public function fill($data)
     {
