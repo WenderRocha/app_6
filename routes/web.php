@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +32,25 @@ Route::get('/dashboard', function () {
 Route::get('/components/buttons', function () {
     return Inertia::render('Components/Buttons');
 })->middleware(['auth', 'verified'])->name('components.buttons');
+
+
+/*
+|--------------------------------------------------------------------------
+|  Permission Controller
+|--------------------------------------------------------------------------
+*/
+Route::group([
+
+    'middleware' => ['auth', 'verified'],
+    'prefix' => 'app',
+
+], function () {
+
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/permission/{id}', [PermissionController::class, 'show'])->name('permissions.show');
+    Route::post('/permission', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::put('/permission/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('/permission/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+});
 
 require __DIR__ . '/auth.php';

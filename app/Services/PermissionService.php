@@ -3,24 +3,24 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\PermissionRepositoryInterface;
+use Inertia\Inertia;
 
 class PermissionService
 {
-    protected $permissionRepository;
-
-    public function __construct(PermissionRepositoryInterface $permissionRepository)
-    {
-        $this->permissionRepository = $permissionRepository;
+    public function __construct(
+        protected PermissionRepositoryInterface $permissionRepository
+    ) {
     }
 
     /**
      * Service Layer - Get a listing of the resource.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function index()
     {
-        return $this->permissionRepository->all();
+        $permissions = $this->permissionRepository->all();
+        return Inertia::render('App/Permission/Index', [
+            'permissions' => $permissions
+        ]);
     }
 
     /**

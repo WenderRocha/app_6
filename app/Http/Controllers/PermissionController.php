@@ -7,11 +7,9 @@ use App\Services\PermissionService;
 
 class PermissionController extends Controller
 {
-    protected $service;
-    
-    public function __construct(PermissionService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        protected PermissionService $service
+    ) {
     }
 
     /**
