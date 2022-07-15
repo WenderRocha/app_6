@@ -14,6 +14,19 @@
             </template>
         </SidebarLink>
 
+        <SidebarCollapsible title="Administração" :active="route().current('components.*')">
+            <template #icon>
+                <ShieldCheckIcon class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            </template>
+
+            <SidebarCollapsibleItem
+                :href="route('permissions.index')"
+                title="Permissões"
+                :active="route().current('permissions.index')"
+            />
+        </SidebarCollapsible>
+
+        
         <SidebarCollapsible title="Components" :active="route().current('components.*')">
             <template #icon>
                 <TemplateIcon class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
@@ -63,5 +76,5 @@ import SidebarLink from '@/Components/Sidebar/SidebarLink.vue'
 import { DashboardIcon } from '@/Components/Icons/outline'
 import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
-import { TemplateIcon } from "@heroicons/vue/outline";
+import { TemplateIcon, ShieldCheckIcon } from "@heroicons/vue/outline";
 </script>

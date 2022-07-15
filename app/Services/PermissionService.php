@@ -18,6 +18,7 @@ class PermissionService
     public function index()
     {
         $permissions = $this->permissionRepository->all();
+
         return Inertia::render('App/Permission/Index', [
             'permissions' => $permissions
         ]);
@@ -30,7 +31,9 @@ class PermissionService
      */
     public function store($request)
     {
-        return $this->permissionRepository->create($request);
+        sleep(3);
+        $this->permissionRepository->create($request);
+        return  redirect()->route("permissions.index");
     }
 
     /**
