@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\PermissionService;
+use PhpParser\Node\Stmt\Foreach_;
 
 class PermissionController extends Controller
 {
@@ -64,5 +65,25 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         return $this->service->destroy($id);
+    }
+
+    public function destroyAll(Request $request)
+    {
+        $permissions = $request->all();
+
+        for ($i = 0; $i < count($permissions); $i++) {
+            if ($permissions[$i]['id'] === 'null') {
+                unset($permissions[$i]);
+                $permissions = array_values($permissions);
+            }
+        }
+
+        foreach ($permissions as $permissions) {
+            $this->destroy($permissions['id']);
+        }
+
+
+        //dd($permissions);
+        return  redirect()->route("permissions.index");
     }
 }

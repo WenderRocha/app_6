@@ -31,7 +31,7 @@ class PermissionService
      */
     public function store($request)
     {
-        sleep(3);
+        //sleep(3);
         $this->permissionRepository->create($request);
         return  redirect()->route("permissions.index");
     }
@@ -67,6 +67,7 @@ class PermissionService
      */
     public function destroy($id)
     {
-        return $this->permissionRepository->delete($id);
+        $this->permissionRepository->delete($id);
+        return  redirect()->route("permissions.index");
     }
 }

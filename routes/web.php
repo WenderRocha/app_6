@@ -51,6 +51,7 @@ Route::group([
     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
     Route::put('/permission/{id}', [PermissionController::class, 'update'])->name('permissions.update');
     Route::delete('/permission/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    Route::delete('/permission', [PermissionController::class, 'destroyAll'])->name('permissions.destroyAll');
 });
 
 require __DIR__ . '/auth.php';
