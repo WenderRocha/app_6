@@ -49,7 +49,7 @@ Route::group([
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
     Route::get('/permission/{id}', [PermissionController::class, 'show'])->name('permissions.show');
     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
-    Route::put('/permission/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::put('/permission/edit/{id}', [PermissionController::class, 'update'])->name('permissions.update');
     Route::delete('/permission/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
     Route::delete('/permission', [PermissionController::class, 'destroyAll'])->name('permissions.destroyAll');
 });

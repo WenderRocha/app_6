@@ -29,12 +29,17 @@ class PermissionService
 
     public function show($id)
     {
-        return $this->permissionRepository->find($id);
+        $permission = $this->permissionRepository->find($id);
+
+        return Inertia::render('App/Permission/Index', [
+            'permission' => $permission
+        ]);
     }
 
     public function update($request, $id)
     {
-        return $this->permissionRepository->update($request, $id);
+        $this->permissionRepository->update($request, $id);
+        return  redirect()->route("permissions.index");
     }
 
     public function destroy($id)
@@ -47,13 +52,6 @@ class PermissionService
     public function destroyAll($request)
     {
         $permissions = $request->all();
-
-        for ($i = 0; $i < count($permissions); $i++) {
-            if ($permissions[$i]['id'] === 'null') {
-                unset($permissions[$i]);
-                $permissions = array_values($permissions);
-            }
-        }
 
         foreach ($permissions as $permission) {
             $this->destroy($permission['id']);
