@@ -23,13 +23,13 @@
 
           <Button
             @click="deleteAll()"
-            v-if="checkAll"
+            v-if="selected"
             v-slot="{ iconSizeClasses }"
             class="ml-2 items-center gap-2 max-w-xs"
             variant="danger"
           >
             <PlusCircleIcon :class="iconSizeClasses" aria-hidden="true" />
-            <span>Apagar tudo</span>
+            <span>Apagar todos</span>
           </Button>
         </div>
       </div>
@@ -116,7 +116,7 @@
               <th class="p-4" scope="col">
                 <div class="flex items-center">
                   <t-checkbox
-                    @click="checkedAll((checkAll = !checkAll))"
+                    @click="checkedAll((checkAll = !checkAll)), selecteds()"
                     :checked="checkAll"
                     v-model="checkedPermissions"
                     name=""
@@ -145,6 +145,7 @@
               <td class="p-4 w-4">
                 <div class="flex items-center">
                   <t-checkbox
+                    @change="selecteds()"
                     v-model="checkedPermissions"
                     name="options[]"
                     :value="{
@@ -218,7 +219,7 @@
                     Editar
                   </button>
                   <button
-                    @click="delet(permission.id, permission.name)"
+                    @click="deletePermission(permission.id, permission.name)"
                     type="button"
                     class="
                       inline-flex
@@ -558,9 +559,9 @@ export default defineComponent({
 
       showModal: false,
       clickToClose: false,
-      showDialog: false,
       checkAll: false,
       checkedPermissions: [],
+      selected: false,
 
       dataForm: this.$inertia.form({
         name: null,
@@ -581,7 +582,7 @@ export default defineComponent({
             2000
           ); // 2s
 
-          this.showModal = false;
+          //this.showModal = false;
           this.dataForm.reset();
         },
 
@@ -603,7 +604,7 @@ export default defineComponent({
       });
     },
 
-    delet(id, name) {
+    deletePermission(id, name) {
       Inertia.delete(`/app/permission/${id}`, {
         onBefore: () => confirm(`Desea realmente exluir a permissão ${name} ?`),
 
@@ -617,7 +618,8 @@ export default defineComponent({
             2000
           ); // 2s
 
-          this.dataForm.reset();
+          this.cleanPermissionsChecked();
+          this.cleanForm();
         },
 
         onError: (errors) => {
@@ -629,12 +631,43 @@ export default defineComponent({
             },
             2000
           ); // 2s
+
+          this.cleanPermissionsChecked();
+          this.cleanForm();
         },
       });
     },
 
-    cleanForm() {
-      this.dataForm.reset();
+    deleteAll() {
+      this.$inertia.form(this.checkedPermissions).delete("/app/permission", {
+        onBefore: () =>
+          confirm(`Deseja realmente exluir as permissões selecionadas ?`),
+
+        onSuccess: (page) => {
+          this.$notify(
+            {
+              group: "success",
+              title: "Successo",
+              text: "Permissões Deletadas com sucesso!",
+            },
+            2000
+          ); // 2s
+
+          this.cleanPermissionsChecked();
+          this.cleanForm();
+        },
+
+        onError: (errors) => {
+          this.$notify(
+            {
+              group: "error",
+              title: "Oops",
+              text: "Não foi possivel deletar as permissões!",
+            },
+            2000
+          ); // 2s
+        },
+      });
     },
 
     checkedAll(checkAll) {
@@ -650,41 +683,27 @@ export default defineComponent({
       }
     },
 
-    deleteAll() {
-      this.$inertia.form(this.checkedPermissions).delete("/app/permission", {
-        onBefore: () =>
-          confirm(`Deseja realmente exluir todas as permissões ?`),
+    cleanPermissionsChecked() {
+      this.checkedPermissions = [];
+      this.selected = false;
+      this.checkAll = false;
+    },
 
-        onSuccess: (page) => {
-          this.$notify(
-            {
-              group: "success",
-              title: "Successo",
-              text: "Permissões Deletadas com sucesso!",
-            },
-            2000
-          ); // 2s
+    cleanForm() {
+      this.dataForm.reset();
+    },
 
-          this.checkAll = false;
-          this.dataForm.reset();
-        },
+    selecteds() {
+      this.checkedPermissions.length > 1
+        ? (this.selected = true)
+        : (this.selected = false);
 
-        onError: (errors) => {
-          this.$notify(
-            {
-              group: "error",
-              title: "Oops",
-              text: "Não foi possivel deletar as permissões!",
-            },
-            2000
-          ); // 2s
-        },
-      });
+      console.log(this.checkedPermissions.length);
     },
   },
 
   mounted() {
-    console.log(this.checkedPermissions);
+    console.log(this.checkedPermissions.length);
   },
 });
 </script>
