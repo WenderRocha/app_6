@@ -6,15 +6,22 @@
                     Permissões
                 </h2>
 
-                <Button @click="openModal()" variant="primary" class="items-center gap-2 max-w-xs" v-slot="{ iconSizeClasses }">
-                    <PlusCircleIcon aria-hidden="true" :class="iconSizeClasses" />
-                    <span>Nova permisssão</span>
-                </Button>
+                <div>
+                    <Button @click="openModal()" variant="primary" class="mr-2 items-center gap-2 max-w-xs" v-slot="{ iconSizeClasses }">
+                        <PlusCircleIcon aria-hidden="true" :class="iconSizeClasses" />
+                        <span>Nova permisssão</span>
+                    </Button>
+                    <Button @click="deleteAllPermissions()" v-if="checkAll"  variant="danger" class="items-center gap-2 max-w-xs" v-slot="{ iconSizeClasses }">
+                        <TrashIcon aria-hidden="true" :class="iconSizeClasses" />
+                        <span>Apagar todos</span>
+                    </Button>
+                </div>
+
             </div>
         </template>
 
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-
+           
             <!-- START List permissions-->
             <div class="overflow-x-auto relative  sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -22,7 +29,8 @@
                         <tr>
                             <th scope="col" class="p-4">
                                 <div class="flex items-center">
-                                    <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <t-checkbox @click="checkboxAll((checkAll = !checkAll))" :checked="checkAll" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </t-checkbox>
                                     <label for="checkbox-all-search" class="sr-only">checkbox</label>
                                 </div>
                             </th>
@@ -41,7 +49,12 @@
                         <tr v-for="permission in permissions" :key="permission.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="p-4 w-4">
                                 <div class="flex items-center">
-                                    <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <t-checkbox 
+                                        v-model="permissionsChecked"
+                                        :value="permission"
+                                        @change="checkPermission()"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </t-checkbox>
                                     <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                                 </div>
                             </td>
@@ -57,7 +70,7 @@
                                         <svg class="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         Editar
                                     </button>
-                                    <button type="button" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                                    <button @click="deletePermission(permission)" :disabled="permissionForm.processing" type="button" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
                                         <svg class="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         Apagar
                                     </button>
@@ -158,7 +171,7 @@
                             </Button>
 
                             <button @click="closeModal()" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                Cancelar
+                                Fechar
                             </button>
 
                         </div>
@@ -176,11 +189,12 @@
 </template>
 
 <script>
-  import AuthenticatedLayout from '@/Layouts/Authenticated.vue'
-  import Button from '@/Components/Button.vue'
-  import { PlusCircleIcon, CheckCircleIcon, PencilAltIcon } from "@heroicons/vue/outline";
+  import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
+  import Button from '@/Components/Button.vue';
+  import { PlusCircleIcon, CheckCircleIcon, PencilAltIcon, TrashIcon } from "@heroicons/vue/outline";
   import { Inertia } from "@inertiajs/inertia";
-  import  Notify  from "@/Pages/Shared/Notify.vue"
+  import  Notify  from "@/Pages/Shared/Notify.vue";
+  import { TCheckbox } from "@variantjs/vue";
 
   export default {
 
@@ -190,8 +204,10 @@
         PlusCircleIcon,
         CheckCircleIcon,
         PencilAltIcon,
+        TrashIcon,
         Inertia,
-        Notify
+        Notify,
+        TCheckbox
     },
 
     props: {
@@ -202,7 +218,9 @@
         return {
             isOpen: false,
             editMode: false,
-            permissionForm: this.$inertia.form({id: null, name: null})
+            checkAll: false,
+            permissionForm: this.$inertia.form({id: null, name: null}),
+            permissionsChecked: []
         }
     },
 
@@ -215,9 +233,14 @@
             this.isOpen = false;
             this.editMode = false;
             this.resetForm();
+            this.resetFormEdit();
         },
         resetForm() {
             this.permissionForm.reset();
+        },
+        resetFormEdit() {
+            this.permissionForm.id = null;
+            this.permissionForm.name = null;
         },
         store() {
             this.permissionForm.post("permissions", {
@@ -239,14 +262,59 @@
         update(id) {
             this.permissionForm.put(`permission/${id}/edit`, {
                 onSuccess: () => {
+                    this.resetForm();
                     this.notifyMessage("generic", "Successo", "Permissão atualizada com sucesso!" );
                 },
                 onError: () => {
+                    this.resetForm();
                     this.notifyMessage("error", "Oops", "Não foi possivel atualizar a permissão!" );
                 }
             })
         },
+        deletePermission(permission) {
 
+            this.permissionForm.delete("permission/" + permission.id, {
+                onBefore: () => confirm(`Desea realmente exluir a permissão ${permission.name} ?`),
+                onSuccess: () => {
+                    this.resetForm();
+                    this.notifyMessage("success", "Successo", "Permissão deletada com sucesso!" );
+                },
+                onError: () => {
+                    this.resetForm();
+                    this.notifyMessage("error", "Oops", "Não foi possivel deletar a permissão!" );
+                }
+            })
+            
+        },
+        deleteAllPermissions() {
+            this.$inertia.form(this.permissionsChecked).delete("/app/permissions", {
+                onBefore: () => confirm("Desea realmente exluir todas as permissões?"),
+                onSuccess: () => {
+                    this.cleanPermissionsChecked();
+                    this.resetForm();
+                    this.notifyMessage("success", "Successo", "Permissões deletadas com sucesso!" );
+                },
+                onError: () => {
+                    this.cleanPermissionsChecked();
+                    this.resetForm();
+                    this.notifyMessage("error", "Oops", "Não foi possivel deletar sa permissões!" );
+                },
+                onFinish: () => {
+                    this.cleanPermissionsChecked();
+                }
+            })
+        },
+        cleanPermissionsChecked() {
+            this.permissionsChecked = [];
+            this.checkAll = false;
+        },
+        checkPermission() {
+            (this.permissionsChecked.length === 0) ? this.checkAll = false : null;
+            (this.permissionsChecked.length > 1 ) ? this.checkAll = true : this.checkAll = false
+        },
+        checkboxAll(checkAll) {
+            (checkAll) ? this.permissions.filter((el, index) => { this.permissionsChecked[index] = el}) : this.permissionsChecked = [];
+        },
         notifyMessage(group, title, text, time = 2000) {
             this.$notify({group: group, title: title, text: text}, time) // 2s
         }
